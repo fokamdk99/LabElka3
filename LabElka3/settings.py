@@ -23,12 +23,14 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dr4)s%^xogdbc-5y+ko1211k5m@i^esz8*hou-k@l&69gf0+37'
+#SECRET_KEY = 'dr4)s%^xogdbc-5y+ko1211k5m@i^esz8*hou-k@l&69gf0+37'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'LabElka3.herokuapp.com',
+]
 
 
 # Application definition
@@ -93,11 +95,18 @@ WSGI_APPLICATION = 'LabElka3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}'''
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 
