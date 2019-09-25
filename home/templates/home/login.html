@@ -1,0 +1,102 @@
+{% extends "home/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login6.css' %}">
+<title>landing page</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+        <div class=row>
+            <div class="col-2 green caly-ekran to-right">
+                <div class="row logo">
+                    <div class="col-sm">
+
+                        <img src="{% static 'images/logo_transparent.png' %}" height="300" width="300">
+                    </div>
+                </div>
+
+                <div class="row red cwierc-ekranu">
+                </div>
+            </div>
+            <div class="col-sm blue to-left">
+                <div class="row align-bottom1">
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-3">
+                        <div class="card log-in" style="width: 18rem;">
+                            <img class="card-img-top" src="{% static 'images/login.svg' %}" alt="Card image cap" width="50px"
+                                height="100px">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Zaloguj sie</h5>
+                                <form action="{% url 'login_authenticate' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            aria-describedby="emailHelp" placeholder="Enter username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+
+                        <div class="card sign-up" style="width: 18rem;">
+                            <img class="card-img-top" src="{% static 'images/login.svg' %}" alt="Card image cap" width="50px"
+                                height="100px">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Zarejestruj sie</h5>
+                                <form action="{% url 'create_new_user' %}" method="post">
+                                        {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="email">Email address</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            aria-describedby="emailHelp" placeholder="Enter email">
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="username">username</label>
+                                            <input type="text" class="form-control" id="username" name="username"
+                                                aria-describedby="emailHelp" placeholder="Enter your username">
+                                        
+                                        </div>
+                                    
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-sm">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('usuwam js localstorage');
+            window.localStorage.clear();
+        });
+    </script>
+
+{% endblock %}

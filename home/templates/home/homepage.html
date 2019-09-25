@@ -1,0 +1,618 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block head %}
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+    </script>
+    <link rel="stylesheet" href="LabElka/homepage1.css">
+    <title>tytul</title>
+</head>
+
+{% endblock %}
+{% block body %}
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">LabElka</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'log_out' %}">Wyloguj sie</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 element" style="overflow:scroll; height: 100vh;">
+                <div class="row">
+                    <img src="{% static 'images/logo_transparent.png' %}" height="300" width="300">
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <!-- Search Widget -->
+                        <div class="card my-4">
+                            <h5 class="card-header">Search</h5>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search for...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button">Go!</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Categories Widget -->
+                        <div class="card my-4">
+                            <h5 class="card-header">Semestr</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ul id="lista-semestry" class="list-unstyled mb-0 semestry">
+                                            {% for semester in semesters %}
+                                            <li><a href="" class="semester"
+                                                    data-semester="{{ forloop.counter }}">{{ semester }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6 semestry">
+                                        <ul class="list-unstyled mb-0">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-4">
+                            <h5 class="card-header">Przedmiot</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 przedmioty">
+                                        <ul id="lista-przedmioty" class="list-unstyled mb-0">
+
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6 przedmioty">
+                                        <ul class="list-unstyled mb-0">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-4">
+                            <h5 class="card-header">Test</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 testy">
+                                        <ul class="list-unstyled mb-0" id="lista-testy">
+
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6 testy">
+                                        <ul class="list-unstyled mb-0">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div id="posty" class="container">
+
+                    <div id="new-post" class="card my-4" hidden>
+                        <h5 class="card-header">Create new post</h5>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'add_post' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tytul posta</label>
+                                    <input type="text" class="form-control" id="new-post-title" name="new-post-title"
+                                        aria-describedby="emailHelp" placeholder="Enter title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">Content</label>
+                                    <textarea rows="3" class="form-control" id="content" name="new-post-content"
+                                        placeholder="Enter your content here"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments">Dodaj notatki</label>
+                                    <input type="file" class="form-control-file" id="new-post-attachments"
+                                        name="new-post-attachments" multiple>
+                                </div>
+                                <input hidden id="new-post-test" name="new-post-test" type="text">
+                                <input hidden id="new-post-przedmiot" name="new-post-przedmiot" type="text">
+                                <button id="new-post-submit" class="btn btn-primary">Submit</button>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card my-4">
+                    <h5 class="card-header">Znajomi</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+
+                            </div>
+                            <div class="col-lg-6">
+                                <ul id="znajomi" class="list-unstyled mb-0">
+                                    {% for znajomy in znajomi %}
+                                    <li>
+                                        <div class="media">
+                                            <img src="{% static 'images/background.jpg' %}"
+                                                class="align-self-center mr-3" alt="" width=" 30px" height="30px">
+                                            <div class="media-body">
+
+                                                <p class="mb-0 text-center">{{ znajomy.username }}</p>
+                                                <p class="mb-0 text-center"><a type="reset" href="" class="conversation"
+                                                        data-znajomy="{{ znajomy.username }}">Conversation</a></p>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <h5 class="card-header">Osoby</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+
+                            </div>
+                            <div class="col-lg-9">
+                                <ul id="znajomi" class="list-unstyled mb-0">
+                                    {% for human in people %}
+                                    <li>
+                                        <div class="media">
+                                            <img src="{% static 'images/background.jpg' %}"
+                                                class="align-self-center mr-3" alt="" width=" 30px" height="30px">
+                                            <div class="media-body">
+
+                                                <p class="mb-0 text-center">{{ human.username }}</p>
+                                                <p class="mb-0 text-center"><a href="" class="stranger"
+                                                        data-username="{{ human.username }}">Zapros do znajomych</a></p>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                var aktualny_semestr = 0;
+                var aktualny_przedmiot = '';
+                var aktualny_test = '';
+
+                //channels
+
+                var chatSocket = new WebSocket('ws://' + window.location.host +
+                    '/ws/home/homepage/');
+
+
+
+
+
+                //javascript
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('javascript pracuje');
+                    document.querySelectorAll('.semester').forEach(link => {
+                        console.log('przyciski pracuja');
+                        link.onclick = () => {
+
+                            aktualny_semestr = link.dataset.semester;
+                            console.log(`aktualny semetr: ${aktualny_semestr}`);
+                            window.localStorage.setItem("aktualny_semestr", aktualny_semestr);
+                            load_content(`semestr/${aktualny_semestr}`, 'przedmiot');
+                            return false;
+                        }
+
+
+
+                    });
+                    /*document.querySelectorAll('.znajomy').forEach(link => {
+                        link.onclick = () => {
+                            const request = XMLHttpRequest();
+                            string = '{{ user.username }}';
+                            window.localStorage.setItem('current_friend', `${string}`);
+
+                            request.open('GET', `chat/${string}`);
+                            request.send();
+                        }
+                    })*/
+
+
+                    document.querySelectorAll('.stranger').forEach(link => {
+                        link.onclick = () => {
+                            console.log('wzywam serwer aby dodal znajomego');
+                            username = link.dataset.username;
+                            chatSocket.send(JSON.stringify({
+                                'username': '{{ user.username }}',
+                                'friend_username': username,
+                                'command': 'server_add_friend'
+                            }));
+                            return false;
+                        }
+                    });
+
+                    document.querySelectorAll('.conversation').forEach(link => {
+                        link.onclick = () => {
+                            username = link.dataset.znajomy;
+                            window.localStorage.setItem('current_friend', `${username}`);
+                            console.log(`current friend to: ${window.localStorage.getItem('current_friend')}`);
+                            //const request = new XMLHttpRequest();
+                            //request.open('GET', `chat/${username}`);
+                            //request.send();
+                            window.location = `chat/${username}`;
+                            return false;
+
+                        }
+                    });
+
+                });
+
+                window.onload = () => {
+                    if (window.localStorage.getItem("aktualny_semestr") !== null
+                        && window.localStorage.getItem("aktualny_przedmiot") !== null
+                        && window.localStorage.getItem("aktualny_test") !== null) {
+                        aktualny_semestr = window.localStorage.getItem("aktualny_semestr");
+                        aktualny_przedmiot = window.localStorage.getItem("aktualny_przedmiot");
+                        aktualny_test = window.localStorage.getItem("aktualny_test");
+                        console.log('zapamietalem poprzednia strone');
+                        document.querySelector('#lista-przedmioty').innerHTML = '';
+                        document.querySelector('#lista-testy').innerHTML = '';
+                        row = document.querySelector('#lista-posty');
+                        if (row !== null) {
+                            document.getElementById("#lista-posty").remove();
+                        }
+
+
+                        load_content(`semestr/${aktualny_semestr}`, 'przedmiot');
+                        load_content(`/semestr/${aktualny_semestr}/${aktualny_przedmiot}`, 'test');
+                        load_posts();
+                    }
+                }
+
+
+
+                function aktywuj_przedmioty() {
+                    console.log('aktywuje przedmioty');
+                    document.querySelectorAll('.przedmiot').forEach(link => {
+                        link.onclick = () => {
+                            console.log('wcisniety element');
+                            aktualny_przedmiot = link.dataset.nazwa;
+                            console.log(`aktualny przedmiot: ${aktualny_przedmiot}`);
+                            document.querySelector('#new-post-przedmiot').value = aktualny_przedmiot;
+                            document.querySelector('#new-post-przedmiot').innerHTML = aktualny_przedmiot;
+                            window.localStorage.setItem("aktualny_przedmiot", aktualny_przedmiot);
+                            load_content(`/semestr/${aktualny_semestr}/${aktualny_przedmiot}`, 'test');
+                            return false;
+                        }
+                    });
+                };
+
+                function aktywuj_testy() {
+                    console.log('aktywuje testy');
+                    document.querySelectorAll('.test').forEach(link => {
+                        link.onclick = () => {
+                            console.log('wcisniety element');
+                            aktualny_test = link.dataset.nazwa;
+                            console.log(`aktualny test: ${aktualny_test}`);
+                            document.querySelector('#new-post-test').value = aktualny_test;
+                            document.querySelector('#new-post-test').innerHTML = aktualny_test;
+                            window.localStorage.setItem("aktualny_test", aktualny_test);
+                            load_posts();
+                            //test();
+                            return false;
+                        }
+                    });
+                };
+
+                function test() {
+                    console.log('nie refreshuje sie!');
+                    aktualny_test = aktualny_test.replace(/\s/g, "-");
+                    console.log(`loading posts, aktualny: ${aktualny_test}`);
+                    const request = new XMLHttpRequest();
+                    url = `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}`;
+                    console.log(`url wynosi: ${url}`);
+                    request.open('GET', url);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+
+                        console.log('test: zebralem dane');
+                        //data.forEach(add_post);
+                        //return false;
+                    }
+                    request.send();
+
+                }
+
+
+                function load_content(get_request, typ) {
+                    const request = new XMLHttpRequest();
+                    request.open('GET', get_request);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        console.log('otrzymalem dane');
+                        add_content(data, typ);
+                        if (typ === "przedmiot") { aktywuj_przedmioty(); }
+                        else if (typ === "test") { aktywuj_testy(); }
+                        //return false;
+
+                    };
+                    request.send();
+                };
+
+                function add_content(data, typ) {
+                    data.forEach(nazwa => {
+                        console.log(`nazwa elementu: ${nazwa}`);
+                        const przedmiot = document.createElement('li');
+                        //przedmiot.className = typ;
+                        //przedmiot.dataset.nazwa = nazwa;
+                        przedmiot.innerHTML = '';
+                        a = document.createElement('a');
+                        a.setAttribute('href', '');
+                        a.className = typ;
+                        a.textContent = nazwa;
+                        a.dataset.nazwa = nazwa;
+                        przedmiot.appendChild(a);
+                        const id = '#' + 'lista-' + typ + 'y';
+                        id1 = '#przedmiot';
+                        console.log(`id wynosi: ${id}, id1: ${id1}`);
+                        document.querySelector(id).appendChild(przedmiot);
+                    });
+                };
+
+                function load_posts() {
+                    document.querySelector('#new-post').hidden = false;
+                    aktualny_test = aktualny_test.replace(/\s/g, "-");
+                    console.log(`loading posts, aktualny: ${aktualny_test}`);
+                    const request = new XMLHttpRequest();
+                    request.open('GET', `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}`);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        data.forEach(add_post);
+
+                        //return false;
+                    }
+                    request.send();
+                }
+
+                function add_post(post) { //potrzebne: title, author, date, content
+                    //rzad, w ktorym miesci sie post
+                    console.log('adding post');
+                    row1 = document.createElement('div');
+                    row1.className = 'row';
+                    row1.setAttribute('id', 'lista-posty');
+                    document.querySelector('#posty').appendChild(row1);
+                    //kolumna, w ktorej miesci sie post
+                    col1 = document.createElement('div');
+                    col1.className = 'col-lg-12';
+                    row1.appendChild(col1);
+                    //tytul posta
+                    tytul = document.createElement('h1');
+                    tytul.className = 'mt-4';
+                    tytul.innerHTML = post.title;
+                    col1.appendChild(tytul);
+                    //autor
+                    p1 = document.createElement('p');
+                    p1.className = 'lead';
+                    p1.innerHTML = 'autor: ';
+                    col1.appendChild(p1);
+                    a1 = document.createElement('a');
+                    a1.setAttribute('href', '#');
+                    a1.innerHTML = post.author;//post.author;
+                    p1.appendChild(a1);
+                    hr1 = document.createElement('hr');
+                    col1.appendChild(hr1);
+                    //data opublikowania posta
+                    p2 = document.createElement('p');
+                    p2.innerHTML = 'Opublikowano: ' + post.date;
+                    col1.appendChild(p2);
+                    p3 = document.createElement('p');
+                    p3.className = 'lead content';
+                    p3.innerHTML = post.content;
+                    col1.appendChild(p3);
+
+                    //zalaczniki
+                    div4 = document.createElement('div');
+                    div4.className = 'card my-4';
+                    col1.appendChild(div4);
+                    //tytul formy z dodaniem komentarza
+                    h3 = document.createElement('h5');
+                    h3.className = 'card-header';
+                    h3.innerHTML = 'Zalaczniki';
+                    div4.appendChild(h3);
+                    for (i = 0; i < post.attachments.length; i++) {
+                        a = document.createElement('a');
+                        console.log(`url: ${post.attachments[i]}`);
+                        a.setAttribute('href', post.attachments[i]);
+                        a.innerHTML = 'zalacznik nr ' + (i + 1).toString();
+                        div4.appendChild(a);
+                    }
+
+                    //cialo formy
+                    /*div2 = document.createElement('div');
+                    div2.className = 'card-body';
+                    div1.appendChild(div2);*/
+
+                    //forma z dodaniem komentarza
+                    div1 = document.createElement('div');
+                    div1.className = 'card my-4';
+                    col1.appendChild(div1);
+                    //tytul formy z dodaniem komentarza
+                    h2 = document.createElement('h5');
+                    h2.className = 'card-header';
+                    h2.innerHTML = 'Zostaw komentarz';
+                    div1.appendChild(h2);
+                    //cialo formy
+                    div2 = document.createElement('div');
+                    div2.className = 'card-body';
+                    div1.appendChild(div2);
+                    form1 = document.createElement('form');
+                    div2.appendChild(form1);
+                    div3 = document.createElement('div');
+                    div3.className = 'form-group';
+                    form1.appendChild(div3);
+                    textarea1 = document.createElement('textarea');
+                    textarea1.className = 'form-control';
+                    textarea1.setAttribute('rows', '3');
+                    div3.appendChild(textarea1);
+                    button1 = document.createElement('button');
+                    button1.setAttribute('type', 'submit');
+                    button1.className = 'btn btn-primary';
+                    button1.innerHTML = 'Submit';
+                    form1.appendChild(button1);
+                }
+
+                /*document.querySelector('#new-post-submit').onclick = () => {
+                    author = '{{ user.username }}';
+                    title = document.querySelector('#new-post-title').value;
+                    content=document.querySelector('#new-post-content').value;
+                    //connect to socket here
+
+                };*/
+
+                function conversation() {
+                    console.log('wchodze do konwersacji');
+                    document.querySelectorAll('.conversation').forEach(link => {
+                        link.addEventListener('click', go_to_conversation(link.dataset.znajomy), false);
+                    })
+                }
+
+                function go_to_conversation(username) {
+                    const request = new XMLHttpRequest();
+                    console.log('przechodze do konwersacji');
+                    request.open('GET', `chat/${username}`);
+                    request.send();
+                    return false;
+
+                }
+
+                //channels
+
+                chatSocket.onmessage = function (e) {
+                    var data = JSON.parse(e.data);
+                    var command = data['command'];
+                    var fn = window[command];
+                    if (typeof fn === "function") {
+                        fn.apply(data);
+                    }
+                };
+
+                chatSocket.onclose = function (e) {
+                    console.error('chatSocket closed unexpctedly');
+                    chatSocket.close();
+                };
+
+                chatSocket.onopen = function (e) {
+                    console.log('channels pracuje');
+                    chatSocket.send(JSON.stringify({
+                        'command': 'server_receive_message',
+                        'message': 'Channels dzialaja!'
+                    }));
+                }
+
+                function js_send_data() {
+                    console.log(JSON.stringify({ command: 'cos', message: 'cos1' }));
+
+                    console.log('channels pracuje');
+                    chatSocket.send(JSON.stringify({
+                        'command': 'server_receive_message',
+                        'message': 'Channels dzialaja!'
+                    }));
+
+
+                };
+
+                function js_receive_data() {
+                    console.log(`dziala js_receive_data, message: ${this.message}`);
+                    div = document.createElement('div');
+                    div.innerHTML = this.message;
+                    document.body.appendChild(div);
+                };
+
+                function js_add_friend_to_dom() {
+                    console.log(`wchodze w add_friend_to_dom, username: ${this.username}`);
+                    li = document.createElement('li');
+                    div1 = document.createElement('div');
+                    div1.className = 'media';
+                    li.appendChild(div1);
+                    img = document.createElement('img');
+                    img.className = 'align-self-center mr-3';
+                    img.setAttribute('src', "{% static 'images/background.jpg' %}");
+                    img.setAttribute('width', '30px');
+                    img.setAttribute('height', '30px');
+                    div1.appendChild(img);
+                    div2 = document.createElement('div');
+                    div2.className = 'media-body';
+                    div1.appendChild(div2);
+                    p = document.createElement('p');
+                    p.className = 'mb-0 text-center';
+                    p.innerHTML = this.username;
+                    div2.appendChild(p);
+                    p2 = document.createElement('p');
+                    p2.className = 'mb-0 text-center';
+                    p2.innerHTML = '';
+                    div2.appendChild(p2);
+                    a = document.createElement('a');
+                    a.className = 'conversation';
+                    a.dataset.znajomy = this.username;
+                    a.setAttribute('href', '');
+                    a.innerHTML = 'Conversation';
+                    a.addEventListener('click', go_to_conversation);
+                    p2.appendChild(a);
+                    document.querySelector('#znajomi').append(li);
+
+                }
+
+                //conversation();
+
+            </script>
+</body>
+
+{% endblock %}

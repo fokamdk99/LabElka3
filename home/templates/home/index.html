@@ -1,0 +1,12 @@
+{% extends 'home/base.html' %}
+
+{% block head %}
+<title>
+    LabElka
+</title>
+{% endblock %}
+{% block body %}
+<h2>Witaj na stronie LabElka</h2>
+<a href="{% url 'log_in'%}">Log in</a>
+<a href="{% url 'sign_up' %}">Sign up</a>
+{% endblock %}

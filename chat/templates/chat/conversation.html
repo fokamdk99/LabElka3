@@ -1,0 +1,473 @@
+{% load static %}
+
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+    rel="stylesheet">
+  <style>
+    .container {
+      max-width: 1170px;
+      margin: auto;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .inbox_people {
+      background: #f8f8f8 none repeat scroll 0 0;
+      float: left;
+      overflow: hidden;
+      width: 40%;
+      border-right: 1px solid #c4c4c4;
+    }
+
+    .inbox_msg {
+      border: 1px solid #c4c4c4;
+      clear: both;
+      overflow: hidden;
+    }
+
+    .top_spac {
+      margin: 20px 0 0;
+    }
+
+
+    .recent_heading {
+      float: left;
+      width: 40%;
+    }
+
+    .srch_bar {
+      display: inline-block;
+      text-align: right;
+      width: 60%;
+      padding: 10px;
+    }
+
+    .headind_srch {
+      padding: 10px 29px 10px 20px;
+      overflow: hidden;
+      border-bottom: 1px solid #c4c4c4;
+    }
+
+    .recent_heading h4 {
+      color: #05728f;
+      font-size: 21px;
+      margin: auto;
+    }
+
+    .srch_bar input {
+      border: 1px solid #cdcdcd;
+      border-width: 0 0 1px 0;
+      width: 80%;
+      padding: 2px 0 4px 6px;
+      background: none;
+    }
+
+    .srch_bar .input-group-addon button {
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+      border: medium none;
+      padding: 0;
+      color: #707070;
+      font-size: 18px;
+    }
+
+    .srch_bar .input-group-addon {
+      margin: 0 0 0 -27px;
+    }
+
+    .chat_ib h5 {
+      font-size: 15px;
+      color: #464646;
+      margin: 0 0 8px 0;
+    }
+
+    .chat_ib h5 span {
+      font-size: 13px;
+      float: right;
+    }
+
+    .chat_ib p {
+      font-size: 14px;
+      color: #989898;
+      margin: auto
+    }
+
+    .chat_img {
+      float: left;
+      width: 11%;
+    }
+
+    .chat_ib {
+      float: left;
+      padding: 0 0 0 15px;
+      width: 88%;
+    }
+
+    .chat_people {
+      overflow: hidden;
+      clear: both;
+    }
+
+    .chat_list {
+      border-bottom: 1px solid #c4c4c4;
+      margin: 0;
+      padding: 18px 16px 10px;
+    }
+
+    .inbox_chat {
+      height: 550px;
+      overflow-y: scroll;
+    }
+
+    .active_chat {
+      background: #ebebeb;
+    }
+
+    .incoming_msg_img {
+      display: inline-block;
+      width: 6%;
+    }
+
+    .received_msg {
+      display: inline-block;
+      padding: 0 0 0 10px;
+      vertical-align: top;
+      width: 92%;
+    }
+
+    .received_withd_msg p {
+      background: #ebebeb none repeat scroll 0 0;
+      border-radius: 3px;
+      color: #646464;
+      font-size: 14px;
+      margin: 0;
+      padding: 5px 10px 5px 12px;
+      width: 100%;
+    }
+
+    .time_date {
+      color: #747474;
+      display: block;
+      font-size: 12px;
+      margin: 8px 0 0;
+    }
+
+    .received_withd_msg {
+      width: 57%;
+    }
+
+    .mesgs {
+      float: left;
+      padding: 30px 15px 0 25px;
+      width: 60%;
+    }
+
+    .sent_msg p {
+      background: #05728f none repeat scroll 0 0;
+      border-radius: 3px;
+      font-size: 14px;
+      margin: 0;
+      color: #fff;
+      padding: 5px 10px 5px 12px;
+      width: 100%;
+    }
+
+    .outgoing_msg {
+      overflow: hidden;
+      margin: 26px 0 26px;
+    }
+
+    .sent_msg {
+      float: right;
+      width: 46%;
+    }
+
+    .input_msg_write input {
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+      border: medium none;
+      color: #4c4c4c;
+      font-size: 15px;
+      min-height: 48px;
+      width: 100%;
+    }
+
+    .type_msg {
+      border-top: 1px solid #c4c4c4;
+      position: relative;
+    }
+
+    .msg_send_btn {
+      background: #05728f none repeat scroll 0 0;
+      border: medium none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      font-size: 17px;
+      height: 33px;
+      position: absolute;
+      right: 0;
+      top: 11px;
+      width: 33px;
+    }
+
+    .messaging {
+      padding: 0 0 50px 0;
+    }
+
+    .msg_history {
+      height: 516px;
+      overflow-y: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h3 class=" text-center">Messaging</h3>
+    <div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+          <div class="headind_srch">
+            <div class="recent_heading">
+              <h4>Recent</h4>
+            </div>
+            <div class="srch_bar">
+              <div class="stylish-input-group">
+                <input type="text" class="search-bar" placeholder="Search">
+                <span class="input-group-addon">
+                  <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                </span> </div>
+            </div>
+          </div>
+          <div class="inbox_chat">
+            <div class="chat_list active_chat">
+              <div class="chat_people">
+                  
+                {% for object in konwersacje %}
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div id="{{ object.friend }}" class="chat_ib " data-friend="{{ object.friend }}"
+                data-konwersacja="{{ object.konwersacja.name }}">
+                  <h5>{{ object.friend }} <span class="chat_date">{{ object.konwersacja.last_spoken_with }}</span></h5>
+                  <p>{{ object.najnowsza_wiadomosc }}</p>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="mesgs">
+          <div id="msg-history" class="msg_history">
+
+
+            <div class="type_msg">
+              <div class="input_msg_write">
+                <input id="message-input" type="text" class="write_msg" placeholder="Type a message" />
+                <button id="send-message" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                    aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+    <script>
+      var konwersacja = '{{ konwersacja.name }}';
+      var chatSocket = new WebSocket('ws://' + window.location.host +
+        `/ws/chat/${konwersacja}/`);
+        
+      
+
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('oczekuje na wiadomosc');
+        var current_friend = window.localStorage.getItem('current_friend');  
+        console.log(`domcontent loaded, friend to: ${current_friend}`);
+        js_send_message();
+        document.querySelectorAll('.chat_ib').forEach(link => {
+          link.onclick = () => {
+            link.style.background='rgb(0,255,0,0.3)';
+            friend = window.localStorage.getItem('current_friend');
+        string = '#' + friend;
+        console.log(`content loaded, string to: ${string}`);
+        document.querySelector(`${string}`).style.background='rgb(235, 235, 235)';
+        window.localStorage.setItem('current_friend', `${link.dataset.friend}`);
+        window.localStorage.setItem('current_conversation', `${link.dataset.konwersacja}`);
+        console.log(`konwersacja teraz to ${window.localStorage.getItem('current_conversation')}`);
+            console.log('kliknieta konwersacja');
+            chatSocket.send(JSON.stringify({
+              'command':'fetch_messages',
+              'conversation':'',
+              'username':'{{ user.username }}',
+              'friend':link.dataset.friend
+            }))
+          };
+        });
+
+        window.localStorage.setItem('current_conversation', '{{ konwersacja.name }}');
+        console.log(`konwersacja na poczatek to ${window.localStorage.getItem('current_conversation')}`);
+      });
+
+      function fetch_messages() {
+        
+        chatSocket.send(JSON.stringify({
+          'command': 'fetch_messages',
+          'conversation': '{{ konwersacja.name }}',
+          
+        }))
+      };
+
+      function show_fetched_messages() {
+        incoming = document.querySelectorAll('.incoming_msg');
+        if(incoming){ Array.prototype.forEach.call(incoming, function(node){
+          node.parentNode.removeChild( node );
+        }); }
+        outgoing = document.querySelectorAll('.outgoing_msg');
+        if(outgoing){ Array.prototype.forEach.call(outgoing, function(node){
+          node.parentNode.removeChild( node );
+        }); }
+        
+        messages = this.messages;
+        console.log(`ilosc otrzymanych wiadomosci: ${messages.length}`);
+        for (i = 0; i < messages.length; i++) {
+          console.log(`content: ${messages[i].content}`);
+          add_fetched_message(messages[i]);
+        }
+      };
+
+      function add_fetched_message(message) {
+        if (message.author !== '{{ user.username }}') {
+          div1 = document.createElement('div'); //incoming_msg
+          div1.className = 'incoming_msg';
+          document.querySelector('#msg-history').appendChild(div1);
+          div2 = document.createElement('div');//incoming_msg_img
+          div2.className = 'incoming_msg_img';
+          div1.appendChild(div2);
+          img = document.createElement('img');
+          img.setAttribute('src', 'https://ptetutorials.com/images/user-profile.png');
+          div2.appendChild(img);
+          div3 = document.createElement('div'); //received-msg
+          div3.className = 'received_msg';
+          div1.appendChild(div3);
+          div4 = document.createElement('div');
+          div4.className = 'received_withd_msg';
+          div3.appendChild(div4);
+          p = document.createElement('p');
+          p.innerHTML = message.content;
+          div4.appendChild(p);
+          span1 = document.createElement('span');
+          span1.className = 'time_date';
+          span1.innerHTML = message.timestamp;
+          div4.appendChild(span1);
+        }
+        else {
+          div1 = document.createElement('div');
+          div1.className = 'outgoing_msg';
+          document.querySelector('#msg-history').appendChild(div1);
+          div2 = document.createElement('div');
+          div2.className = 'sent_msg';
+          div1.appendChild(div2);
+          p1 = document.createElement('p');
+          p1.innerHTML = message.content;
+          div2.appendChild(p1);
+          span1 = document.createElement('span');
+          span1.className = 'time_date';
+          span1.innerHTML = message.timestamp;
+          div2.appendChild(span1);
+        }
+
+        //dodaj jeszcze daty
+
+      };
+
+      function js_send_message() {
+        document.querySelector('#message-input').onkeyup = e => {
+          if (e.keyCode === 13) {
+            document.querySelector('#send-message').click();
+            console.log('wcisniety enter');
+          }
+        };
+        document.querySelector('#send-message').onclick = () => {
+          message = document.querySelector('#message-input').value;
+          chatSocket.send(JSON.stringify({
+            'command': 'server_send_response',
+            'message': message,
+            'author': '{{ user.username }}',
+            'konwersacja': window.localStorage.getItem('current_conversation')
+          }));
+
+          document.querySelector('#message-input').value = '';
+
+        };
+      };
+
+      function js_receive_message() {
+        console.log('dziala js_receive_message');
+        //document.querySelector('#chat-log').innerHTML += this.message += '\n';
+        add_fetched_message(this.message);
+        document.querySelector('#message-input').innerHTML = '';
+      };
+
+      /*function js_send_data() {
+        console.log(JSON.stringify({ command: 'cos', message: 'cos1' }));
+        document.querySelector('#trigger').onclick = () => {
+          console.log('przycisk klikniety');
+          chatSocket.send(JSON.stringify({
+            'command': 'server_receive_message',
+            'message': 'Channels dzialaja!'
+          }));
+        };
+
+      };
+
+      function js_receive_data() {
+        console.log('dziala js_receive_data');
+        div = document.createElement('div');
+        div.innerHTML = this.message;
+        document.body.appendChild(div);
+      };*/
+
+      chatSocket.onopen = function () {
+        friend = window.localStorage.getItem('current_friend');
+        string = '#' + friend;
+        console.log('onopen');
+        document.querySelector(`${string}`).style.background='rgb(0,255,0,0.3)';
+        console.log(`onopen: ${string}`);
+        fetch_messages();
+      }
+
+      chatSocket.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var command = data['command'];
+        var fn = window[command];
+        if (typeof fn === "function") {
+          fn.apply(data);
+        }
+      };
+
+      chatSocket.onclose = function (e) {
+        console.error('chatSocket closed unexpctedly');
+      };
+    </script>
+</body>
+
+</html>
