@@ -29,7 +29,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 #DEBUG = True
 
 ALLOWED_HOSTS = [
-    'LabElka3.herokuapp.com',
+    'labelka3.herokuapp.com',
 ]
 
 
