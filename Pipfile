@@ -15,6 +15,7 @@ python-decouple = "*"
 django-storages = "*"
 gunicorn = "*"
 daphne = "*"
+channels = "*"
 
 [requires]
 python_version = "3.6"
