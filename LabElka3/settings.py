@@ -149,10 +149,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    
-    os.path.join(BASE_DIR, 'login/templates/static'),
-    os.path.join(BASE_DIR, 'home/templates/static'),
-    os.path.join(BASE_DIR, 'users/templates/static'),
     os.path.join(BASE_DIR, 'chat/templates/static'),
 ]
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
