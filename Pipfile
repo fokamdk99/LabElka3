@@ -16,6 +16,7 @@ django-storages = "*"
 gunicorn = "*"
 daphne = "*"
 channels = "*"
+channels-redis = "*"
 
 [requires]
 python_version = "3.6"
