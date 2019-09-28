@@ -30,6 +30,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 ALLOWED_HOSTS = [
     'labelka3.herokuapp.com',
+    #'127.0.0.1'
 ]
 
 

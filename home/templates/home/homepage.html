@@ -16,7 +16,7 @@
         crossorigin="anonymous"></script>
     <script>
     </script>
-    <link rel="stylesheet" href="LabElka/homepage1.css">
+    
     <title>tytul</title>
 </head>
 
@@ -48,11 +48,11 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3 element" style="overflow:scroll; height: 100vh;">
+            <div class="col-3 element">
                 <div class="row">
                     <img src="{% static 'images/logo_transparent.png' %}" height="300" width="300">
                 </div>
-                <div class="row">
+                <div class="row" style="overflow:scroll; height: 100vh;">
                     <div class="col-sm">
                         <!-- Search Widget -->
                         <div class="card my-4">
@@ -67,7 +67,7 @@
                             </div>
                         </div>
 
-                        <!-- Categories Widget -->
+                        <!-- Semestr Widget -->
                         <div class="card my-4">
                             <h5 class="card-header">Semestr</h5>
                             <div class="card-body">
@@ -226,6 +226,8 @@
                 var aktualny_semestr = 0;
                 var aktualny_przedmiot = '';
                 var aktualny_test = '';
+                var nr_posta = 0;
+                zaladuj_ile_postow = 3;
 
                 //channels
 
@@ -244,6 +246,8 @@
                         console.log('przyciski pracuja');
                         link.onclick = () => {
 
+                            document.querySelector('#lista-przedmioty').innerHTML='';
+                            document.querySelector('#lista-testy').innerHTML='';
                             aktualny_semestr = link.dataset.semester;
                             console.log(`aktualny semetr: ${aktualny_semestr}`);
                             window.localStorage.setItem("aktualny_semestr", aktualny_semestr);
@@ -254,16 +258,6 @@
 
 
                     });
-                    /*document.querySelectorAll('.znajomy').forEach(link => {
-                        link.onclick = () => {
-                            const request = XMLHttpRequest();
-                            string = '{{ user.username }}';
-                            window.localStorage.setItem('current_friend', `${string}`);
-
-                            request.open('GET', `chat/${string}`);
-                            request.send();
-                        }
-                    })*/
 
 
                     document.querySelectorAll('.stranger').forEach(link => {
@@ -295,6 +289,16 @@
 
                 });
 
+                window.onscroll = () => {
+                    console.log('onscroll aktywowany');
+                    if(window.innerHeight + window.scrollY >= document.body.offsetHeight-200
+                    && aktualny_semestr > 0 
+                    && aktualny_przedmiot !== ''
+                    && aktualny_test !== ''){
+                        load_posts();
+                    }
+                };
+
                 window.onload = () => {
                     if (window.localStorage.getItem("aktualny_semestr") !== null
                         && window.localStorage.getItem("aktualny_przedmiot") !== null
@@ -324,6 +328,7 @@
                     document.querySelectorAll('.przedmiot').forEach(link => {
                         link.onclick = () => {
                             console.log('wcisniety element');
+                            document.querySelector('#lista-testy').innerHTML='';
                             aktualny_przedmiot = link.dataset.nazwa;
                             console.log(`aktualny przedmiot: ${aktualny_przedmiot}`);
                             document.querySelector('#new-post-przedmiot').value = aktualny_przedmiot;
@@ -412,7 +417,8 @@
                     aktualny_test = aktualny_test.replace(/\s/g, "-");
                     console.log(`loading posts, aktualny: ${aktualny_test}`);
                     const request = new XMLHttpRequest();
-                    request.open('GET', `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}`);
+                    request.open('GET', `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}/${nr_posta}/${zaladuj_ile_postow}`);
+                    nr_posta += zaladuj_ile_postow;
                     request.onload = () => {
                         const data = JSON.parse(request.responseText);
                         data.forEach(add_post);

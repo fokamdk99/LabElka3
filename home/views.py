@@ -109,8 +109,8 @@ def przedmiot(request, number, nazwa):
 
     return JsonResponse(tests, safe=False)
 
-def posts(request, number, nazwa, test):
-    print(f"python posts: otrzymalem numer {number}, nazwa: {nazwa}, test: {test}")
+def posts(request, number, nazwa, test, nr_posta, ile_postow):
+    print(f"python posts: otrzymalem numer {number}, nazwa: {nazwa}, test: {test}, nr_posta: {nr_posta}, ile_postow: {ile_postow}")
     test = test.replace("-", " ")
     print(f"nowa nazwa testu: {test}")
     przedmiot = Przedmiot.objects.get(subject_name=nazwa)
@@ -119,7 +119,7 @@ def posts(request, number, nazwa, test):
         if(pojedynczy_test.test_name==test):
             szukany_test=pojedynczy_test
     if szukany_test is not None:
-        posty = szukany_test.posty_z_danego_testu.all()
+        posty = szukany_test.posty_z_danego_testu.all()[nr_posta:nr_posta+ile_postow] #laduj posty np. od 6 do 10
     else:
         print(f"nie znaleziono testu")
     #egzamin = Test.objects.get(test_name = test)
