@@ -4,6 +4,9 @@ import json
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from chat.models import Conversation
+from home.models import Post
+from labelka.models import Komentarz
+from .views import comment_to_json
 import string
 import random
 
@@ -66,9 +69,26 @@ class HomeConsumer(WebsocketConsumer):
             'username':friend_username
         }))
 
+    def server_add_comment(self, data):
+        content = data['content']
+        auth=data['author']
+        post_id=data['post_id']
+        tworca = User.objects.get(username=auth)
+        post = Post.objects.get(id=post_id)
+        print(f"wchodze do server_add_comment, content: {content}, autor: {auth}, post_id: {post_id}, post_title: {post.title}")
+        comment = Komentarz(author=tworca,content=content,post=post)
+        comment.save()
+        self.send(json.dumps({
+            'command':'js_add_comment',
+            'comment':comment_to_json(comment),
+            'post_id':post_id
+        }))
+
+
     commands = {
         'server_receive_message':server_receive_message,
-        'server_add_friend':server_add_friend
+        'server_add_friend':server_add_friend,
+        'server_add_comment':server_add_comment
     }
 
     # Receive message from WebSocket

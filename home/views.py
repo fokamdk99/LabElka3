@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from home.models import Semestr, Przedmiot, Test, Post, Attachment
-
+from labelka.models import Komentarz
+import json
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -131,10 +132,30 @@ def posts(request, number, nazwa, test, nr_posta, ile_postow):
         atts = post.attachments.all()
         for i in atts:
             attachments.append(i.att.url)
-        content = {'author':post.author.username, 'title':post.title, 'content':post.content, 'attachments':attachments, 'date':post.date}
-        print(f"views.posts --- zawartosc: {post.title}, {post.content}, {post.date}")
+        comments = post.komentarze.all()
+        komentarze = comments_to_json(comments)
+        print(f"views.posts --- zawartosc: {post.title}, {post.content}, {post.date}, {komentarze}")
+        #komentarze = [{'cos':'cos', 'cos1':'cos1'}]
+        content = {'id':post.id,'author':post.author.username, 'title':post.title, 'content':post.content, 'attachments':attachments, 'date':post.date, 'comments':komentarze}
+        
         posts.append(content)
     #for post in egzamin.post_set.all():
      #   posts.append(post.content)
     
     return JsonResponse(posts, safe=False)
+
+def comments_to_json(comments):
+    results = []
+    for comment in comments:
+        results.append(comment_to_json(comment))
+    if (results == []):
+        return -1
+    return results
+
+def comment_to_json(comment):
+    result = {
+        'author':comment.author.username,
+        'content':comment.content,
+        'date':comment.date.strftime('%Y-%m-%d %H:%M')
+    }
+    return result

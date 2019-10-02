@@ -30,7 +30,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 ALLOWED_HOSTS = [
     'labelka3.herokuapp.com',
-    '127.0.0.1'
+    #'127.0.0.1'
 ]
 
 
@@ -57,8 +57,8 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-            #"hosts": [os.environ['REDIS_URL']],
+            #"hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ['REDIS_URL']],
         },
     },
 }
@@ -97,22 +97,23 @@ WSGI_APPLICATION = 'LabElka3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'OPTIONS': {
+            'charset': 'utf8mb4'  # This is the important line
         }
     }
-}
+}'''
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-'''DATABASES = {
+DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
     )
 
-}'''
+}
 
 
 # Password validation

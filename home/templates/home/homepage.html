@@ -3,20 +3,13 @@
 {% block head %}
 
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <script>
-    </script>
-    
+
+    <style>
+        .post {
+            background-color: aliceblue;
+        }
+    </style>
+
     <title>tytul</title>
 </head>
 
@@ -25,7 +18,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-default sticky-top" style="background-color: #e3f2fd;">
         <a class="navbar-brand" href="#">LabElka</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +32,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'log_out' %}">Wyloguj sie</a>
+                </li>
+                <li>
+                    <a id="" class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true"></a>
                 </li>
 
             </ul>
@@ -158,6 +154,19 @@
                     </div>
 
                 </div>
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#8" role="button" aria-expanded="false" aria-controls="collapseExample">
+                      Link with href
+                    </a>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                      Button with data-target
+                    </button>
+                  </p>
+                  <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    </div>
+                  </div>
             </div>
             <div class="col-sm">
                 <div class="card my-4">
@@ -226,8 +235,8 @@
                 var aktualny_semestr = 0;
                 var aktualny_przedmiot = '';
                 var aktualny_test = '';
-                var nr_posta = 0;
-                zaladuj_ile_postow = 3;
+                var nr_posta = 0; //od ktorego posta serwer ma przesylac dane
+                zaladuj_ile_postow = 3; //jak wiele postow naraz ma wyslac serwer
 
                 //channels
 
@@ -242,12 +251,13 @@
 
                 document.addEventListener('DOMContentLoaded', () => {
                     console.log('javascript pracuje');
+                    //aktywacja linkow z semestrami
                     document.querySelectorAll('.semester').forEach(link => {
                         console.log('przyciski pracuja');
                         link.onclick = () => {
-
-                            document.querySelector('#lista-przedmioty').innerHTML='';
-                            document.querySelector('#lista-testy').innerHTML='';
+                            nr_posta = 0; //dzieki temu serwer bedzie zawsze wysylal posty od numeru 0 do +nieskonczonosc
+                            document.querySelector('#lista-przedmioty').innerHTML = '';
+                            document.querySelector('#lista-testy').innerHTML = '';
                             aktualny_semestr = link.dataset.semester;
                             console.log(`aktualny semetr: ${aktualny_semestr}`);
                             window.localStorage.setItem("aktualny_semestr", aktualny_semestr);
@@ -259,7 +269,7 @@
 
                     });
 
-
+                    //aktywacja linkow z napisem 'zapros do znajomych'
                     document.querySelectorAll('.stranger').forEach(link => {
                         link.onclick = () => {
                             console.log('wzywam serwer aby dodal znajomego');
@@ -273,6 +283,7 @@
                         }
                     });
 
+                    //aktywacja linkow do poszczegolnych konwersacji
                     document.querySelectorAll('.conversation').forEach(link => {
                         link.onclick = () => {
                             username = link.dataset.znajomy;
@@ -289,16 +300,19 @@
 
                 });
 
+                //sprawdzenie czy nie trzeba zaladowac wiecej postow
                 window.onscroll = () => {
                     console.log('onscroll aktywowany');
-                    if(window.innerHeight + window.scrollY >= document.body.offsetHeight-200
-                    && aktualny_semestr > 0 
-                    && aktualny_przedmiot !== ''
-                    && aktualny_test !== ''){
+                    if (
+                        (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200)
+                        && (aktualny_semestr > 0)
+                        && (aktualny_przedmiot !== '')
+                        && (aktualny_test !== '')
+                    ) {
                         load_posts();
                     }
                 };
-
+                //w razie odswiezenia strony funkcja zapewnia, ze strona zostanie otwarta na tym samym semestrze, przedmiocie, tescie
                 window.onload = () => {
                     if (window.localStorage.getItem("aktualny_semestr") !== null
                         && window.localStorage.getItem("aktualny_przedmiot") !== null
@@ -322,13 +336,13 @@
                 }
 
 
-
+                //gdy zostanie wybrany semestr, aktywowane sa linki do poszczegolnych przedmiotow
                 function aktywuj_przedmioty() {
                     console.log('aktywuje przedmioty');
                     document.querySelectorAll('.przedmiot').forEach(link => {
                         link.onclick = () => {
                             console.log('wcisniety element');
-                            document.querySelector('#lista-testy').innerHTML='';
+                            document.querySelector('#lista-testy').innerHTML = '';
                             aktualny_przedmiot = link.dataset.nazwa;
                             console.log(`aktualny przedmiot: ${aktualny_przedmiot}`);
                             document.querySelector('#new-post-przedmiot').value = aktualny_przedmiot;
@@ -340,6 +354,7 @@
                     });
                 };
 
+                //gdy zostanie wybrany przedmiot, aktywowane sa linki do poszczegolnych testow
                 function aktywuj_testy() {
                     console.log('aktywuje testy');
                     document.querySelectorAll('.test').forEach(link => {
@@ -357,26 +372,27 @@
                     });
                 };
 
-                function test() {
-                    console.log('nie refreshuje sie!');
-                    aktualny_test = aktualny_test.replace(/\s/g, "-");
-                    console.log(`loading posts, aktualny: ${aktualny_test}`);
-                    const request = new XMLHttpRequest();
-                    url = `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}`;
-                    console.log(`url wynosi: ${url}`);
-                    request.open('GET', url);
-                    request.onload = () => {
-                        const data = JSON.parse(request.responseText);
-
-                        console.log('test: zebralem dane');
-                        //data.forEach(add_post);
-                        //return false;
-                    }
-                    request.send();
-
-                }
-
-
+                /*
+                            function test() {
+                                console.log('nie refreshuje sie!');
+                                aktualny_test = aktualny_test.replace(/\s/g, "-");
+                                console.log(`loading posts, aktualny: ${aktualny_test}`);
+                                const request = new XMLHttpRequest();
+                                url = `/semestr/${aktualny_semestr}/${aktualny_przedmiot}/${aktualny_test}`;
+                                console.log(`url wynosi: ${url}`);
+                                request.open('GET', url);
+                                request.onload = () => {
+                                    const data = JSON.parse(request.responseText);
+            
+                                    console.log('test: zebralem dane');
+                                    //data.forEach(add_post);
+                                    //return false;
+                                }
+                                request.send();
+            
+                            }
+                            */
+                //funkcja odpowiadajaca za aktywowanie linkow do przedmiotow lub testow zaleznie od tego, co w danej chwili wybierze uzytkownik
                 function load_content(get_request, typ) {
                     const request = new XMLHttpRequest();
                     request.open('GET', get_request);
@@ -391,7 +407,7 @@
                     };
                     request.send();
                 };
-
+                //dodanie linku do przedmiotow lub testow
                 function add_content(data, typ) {
                     data.forEach(nazwa => {
                         console.log(`nazwa elementu: ${nazwa}`);
@@ -412,6 +428,7 @@
                     });
                 };
 
+                //zaladowanie postow
                 function load_posts() {
                     document.querySelector('#new-post').hidden = false;
                     aktualny_test = aktualny_test.replace(/\s/g, "-");
@@ -428,16 +445,19 @@
                     request.send();
                 }
 
+                //dodanie postu do DOM
                 function add_post(post) { //potrzebne: title, author, date, content
                     //rzad, w ktorym miesci sie post
-                    console.log('adding post');
+                    //komenty = post.comments;
+                    //console.log(`adding post: komentarze = ${komenty[0][content]}`);
                     row1 = document.createElement('div');
-                    row1.className = 'row';
+                    row1.className = 'row post';
                     row1.setAttribute('id', 'lista-posty');
                     document.querySelector('#posty').appendChild(row1);
                     //kolumna, w ktorej miesci sie post
-                    col1 = document.createElement('div');
+                    var col1 = document.createElement('div');
                     col1.className = 'col-lg-12';
+                    col1.setAttribute('id', 'kolumna_z_postami');
                     row1.appendChild(col1);
                     //tytul posta
                     tytul = document.createElement('h1');
@@ -474,11 +494,20 @@
                     h3.innerHTML = 'Zalaczniki';
                     div4.appendChild(h3);
                     for (i = 0; i < post.attachments.length; i++) {
-                        a = document.createElement('a');
+                        /*a = document.createElement('a');
                         console.log(`url: ${post.attachments[i]}`);
                         a.setAttribute('href', post.attachments[i]);
+                        a.setAttribute('download','plik');
                         a.innerHTML = 'zalacznik nr ' + (i + 1).toString();
-                        div4.appendChild(a);
+                        div4.appendChild(a);*/
+                        btn = document.createElement('button');
+                        btn.setAttribute('type','submit');
+                        btn.className='btn btn-primary';
+                        btn.innerHTML='download file';
+                        btn.onclick = () => {
+                            window.open(post.attachments[i]);
+                        }
+                        div4.appendChild(btn);
                     }
 
                     //cialo formy
@@ -506,13 +535,105 @@
                     form1.appendChild(div3);
                     textarea1 = document.createElement('textarea');
                     textarea1.className = 'form-control';
+                    textarea1.setAttribute('name', 'zawartosc_komentarza');
+                    str1 = 'zawartosc_komentarza' + `${post.id}`;
+                    textarea1.setAttribute('id', `${str1}`);
                     textarea1.setAttribute('rows', '3');
                     div3.appendChild(textarea1);
                     button1 = document.createElement('button');
                     button1.setAttribute('type', 'submit');
-                    button1.className = 'btn btn-primary';
-                    button1.innerHTML = 'Submit';
+                    button1.className = 'btn btn-primary add_comment';
+                    button1.innerHTML = 'submit';
                     form1.appendChild(button1);
+                    /*button1.onclick = () => {
+                        console.log(`wysylam komentarz do zapisu, textarea inner: ${textarea1.innerHTML}, value: ${textarea1.value}`);
+                        chatSocket.send(JSON.stringify({
+                            'command': 'server_add_comment',
+                            'content': textarea1.innerHTML,
+                            'author': '{{ user.username }}',
+                            'post_id': post.id
+                        }));
+                        return false;
+                    }*/
+                    form1.addEventListener('submit', event => {
+                        var post_id = post.id;
+                        str2 = 'zawartosc_komentarza' + `${post_id}`;
+                        zawartosc_komentarza = document.getElementById(str2).value;
+                        console.log(`wysylam komentarz do zapisu, textarea inner: ${document.getElementById(str2).innerHTML}, value: ${document.getElementById(str2).value}`);
+                        chatSocket.send(JSON.stringify({
+                            'command': 'server_add_comment',
+                            'content': zawartosc_komentarza,
+                            'author': '{{ user.username }}',
+                            'post_id': post.id
+                        }));
+                    event.preventDefault();
+                        });
+                    //komentarze
+                    p2 = document.createElement('p');
+                    col1.appendChild(p2);
+                    a2 = document.createElement('button');
+                    a2.className = 'btn btn-primary';
+                    a2.setAttribute('type','button');
+                    a2.setAttribute('data-toggle', 'collapse');
+                    string = '#komentarze' + post.id;
+                    string1 = 'komentarze' + post.id;
+                    a2.setAttribute('data-target',`${string}`);
+                    //a2.setAttribute('href', '#komentarze');
+                    //a2.setAttribute('role', 'button');
+                    a2.setAttribute('aria-expanded', 'false');
+                    a2.setAttribute('aria-controls', `${string1}`);
+                    a2.innerHTML = 'Komentarze';
+                    p2.appendChild(a2);
+                    /*button2 = document.createElement('button');
+                    button2.className='btn btn-primary';
+                    button2.setAttribute('type','button');
+                    button2.setAttribute('data-toggle', 'collapse');
+                    button2.setAttribute('data-target','#komentarze');
+                    button2.setAttribute('aria-controls','komentarze');*/
+                    div5 = document.createElement('div');
+                    div5.className = 'collapse';
+                    div5.setAttribute('id', `${string1}`);
+                    col1.appendChild(div5);
+                    var post_id = post.id;
+                    if (post.comments !== -1) {
+                        komentarze = post.comments;
+                        for (i = 0; i < komentarze.length; i++) {
+                            add_comment(komentarze[i], post_id);
+                        }
+                    }
+                    else { console.log('komentarze to -1') };
+                    //komentarze.forEach(add_comment);
+
+
+
+                }
+
+                //dodaj komentarz do posta
+                function add_comment(comment, post_id) {
+                    div6 = document.createElement('div');
+                    div6.className = 'card card-body';
+                    //string = `${post_id}`;
+                    string = 'komentarze' + post_id;
+                    lista_komentarzy = document.getElementById(string);
+                    lista_komentarzy.appendChild(div6);
+                    h1 = document.createElement('h5');
+                    h1.className = 'card-title';
+                    h1.innerHTML = comment.author;
+                    div6.appendChild(h1);
+                    p1 = document.createElement('p');
+                    p1.className = 'card-text';
+                    console.log(`content komentarza: ${comment.content}`);
+                    p1.innerHTML = comment.content;
+                    div6.appendChild(p1);
+                    p2 = document.createElement('p');
+                    p2.className = 'card-text';
+                    p2.innerHTML = comment.date;
+                    div6.appendChild(p2);
+                };
+
+                function js_add_comment() {
+                    console.log('komentarz zapisany');
+                    add_comment(this.comment, this.post_id);
                 }
 
                 /*document.querySelector('#new-post-submit').onclick = () => {
@@ -523,6 +644,7 @@
 
                 };*/
 
+                //przejscie do odpowiedniej konwersacji
                 function conversation() {
                     console.log('wchodze do konwersacji');
                     document.querySelectorAll('.conversation').forEach(link => {
@@ -563,7 +685,7 @@
                     }));
                 }
 
-                function js_send_data() {
+                /*function js_send_data() {
                     console.log(JSON.stringify({ command: 'cos', message: 'cos1' }));
 
                     console.log('channels pracuje');
@@ -580,8 +702,9 @@
                     div = document.createElement('div');
                     div.innerHTML = this.message;
                     document.body.appendChild(div);
-                };
+                };*/
 
+                //dodanie przyjaciela
                 function js_add_friend_to_dom() {
                     console.log(`wchodze w add_friend_to_dom, username: ${this.username}`);
                     li = document.createElement('li');
@@ -616,7 +739,9 @@
 
                 }
 
-                //conversation();
+                //dodanie komentarza
+
+
 
             </script>
 </body>
